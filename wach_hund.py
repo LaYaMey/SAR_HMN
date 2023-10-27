@@ -1,7 +1,12 @@
 import time
 import os
+
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
+
+import tkinter as tk
+from tkinter import filedialog
+
 from cli_class import SarClient
 # Define your event handler class
 class WachHundClient(FileSystemEventHandler):
@@ -47,12 +52,21 @@ class WachHundClient(FileSystemEventHandler):
         
 
 
+def select_folder_dialog():
+    root = tk.Tk()
+    root.withdraw()  # Hide the main tkinter window
+
+    folder_path = filedialog.askdirectory()
+    
+    return folder_path
+
 
 
 if __name__ == "__main__":
     # Set the directory to monitor
-    path_to_monitor = "/home/monitored"
+    path_to_monitor = select_folder_dialog()
     # Start monitoring the directory for file system events
+    print(f"Monitoring directory at: {path_to_monitor}")
     event_handler = WachHundClient()
     observer = Observer()
     observer.schedule(event_handler, path=path_to_monitor, recursive=True)
